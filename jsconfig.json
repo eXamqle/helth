@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "checkJs": false,
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM"],
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false
+  },
+  "exclude": ["node_modules"]
+}

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <base href="/helth/">
 
     <!-- PWA Primary Meta Tags -->
     <title>My PWA App</title>
@@ -37,17 +36,11 @@
                 <div class="heatmap-container">
                     <div class="heatmap-months" id="heatmap-months-sleep"></div>
                     <div class="heatmap-wrapper">
-                        <div class="heatmap-days">
-                            <span>Mon</span>
-                            <span>Wed</span>
-                            <span>Fri</span>
-                        </div>
+                        <div class="heatmap-days" id="heatmap-days-sleep"></div>
                         <div class="heatmap-grid" id="heatmap-grid-sleep"></div>
                     </div>
                     <div class="heatmap-legend">
-                        <span>Less</span>
                         <div class="legend-colors" id="legend-colors-sleep"></div>
-                        <span>More</span>
                     </div>
                 </div>
             </section>
@@ -58,17 +51,11 @@
                 <div class="heatmap-container">
                     <div class="heatmap-months" id="heatmap-months-steps"></div>
                     <div class="heatmap-wrapper">
-                        <div class="heatmap-days">
-                            <span>Mon</span>
-                            <span>Wed</span>
-                            <span>Fri</span>
-                        </div>
+                        <div class="heatmap-days" id="heatmap-days-steps"></div>
                         <div class="heatmap-grid" id="heatmap-grid-steps"></div>
                     </div>
                     <div class="heatmap-legend">
-                        <span>Less</span>
                         <div class="legend-colors" id="legend-colors-steps"></div>
-                        <span>More</span>
                     </div>
                 </div>
             </section>
@@ -79,17 +66,11 @@
                 <div class="heatmap-container">
                     <div class="heatmap-months" id="heatmap-months-activity"></div>
                     <div class="heatmap-wrapper">
-                        <div class="heatmap-days">
-                            <span>Mon</span>
-                            <span>Wed</span>
-                            <span>Fri</span>
-                        </div>
+                        <div class="heatmap-days" id="heatmap-days-activity"></div>
                         <div class="heatmap-grid" id="heatmap-grid-activity"></div>
                     </div>
                     <div class="heatmap-legend">
-                        <span>Less</span>
                         <div class="legend-colors" id="legend-colors-activity"></div>
-                        <span>More</span>
                     </div>
                 </div>
             </section>
@@ -98,10 +79,6 @@
                 <p id="status">Checking connection...</p>
             </div>
         </main>
-
-        <footer>
-            <p>Powered by PWA Technology</p>
-        </footer>
     </div>
 
     <script src="health.js"></script>

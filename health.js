@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Health Activity Heatmap
 class HealthDashboard {
   constructor() {
@@ -32,19 +33,20 @@ class HealthDashboard {
   generateMockData() {
     const data = {};
     const endDate = new Date();
+    endDate.setHours(0, 0, 0, 0);
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 364); // Last ~52 weeks
+    startDate.setMonth(startDate.getMonth() - 6);
+    startDate.setHours(0, 0, 0, 0);
 
     let currentDate = new Date(startDate);
 
     while (currentDate <= endDate) {
       const dateStr = currentDate.toISOString().split('T')[0];
 
-      // Generate realistic random data
       data[dateStr] = {
-        sleep: Math.floor(Math.random() * 40) + 60, // 60-100
-        steps: Math.floor(Math.random() * 12000) + 2000, // 2000-14000
-        activity: Math.floor(Math.random() * 60) + 10 // 10-70 minutes
+        sleep: Math.floor(Math.random() * 40) + 60,
+        steps: Math.floor(Math.random() * 12000) + 2000,
+        activity: Math.floor(Math.random() * 60) + 10
       };
 
       currentDate.setDate(currentDate.getDate() + 1);
@@ -114,38 +116,61 @@ class HealthDashboard {
     const grid = document.getElementById(`heatmap-grid-${metric}`);
     const monthsContainer = document.getElementById(`heatmap-months-${metric}`);
     const legendColors = document.getElementById(`legend-colors-${metric}`);
+    const daysContainer = document.getElementById(`heatmap-days-${metric}`);
 
-    if (!grid || !monthsContainer || !legendColors) return;
+    if (!grid || !monthsContainer || !legendColors || !daysContainer) return;
 
     grid.innerHTML = '';
     monthsContainer.innerHTML = '';
     legendColors.innerHTML = '';
+    daysContainer.innerHTML = '';
 
-    // Calculate date range (52 weeks back from today)
+    // Calculate date range (6 months back from today)
     const endDate = new Date();
+    endDate.setHours(0, 0, 0, 0);
+    endDate.setDate(endDate.getDate() + 1); // Add 1 day to include today
+
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 364);
+    startDate.setMonth(startDate.getMonth() - 6);
+    startDate.setHours(0, 0, 0, 0);
 
-    // Adjust to start on a Monday
-    const startDay = startDate.getDay();
-    if (startDay !== 1) {
-      const daysToMonday = startDay === 0 ? -6 : -(startDay - 1);
-      startDate.setDate(startDate.getDate() + daysToMonday);
-    }
+    // Work backwards from today: find the Monday of the week containing today
+    const todayDay = endDate.getDay();
+    const daysFromMonday = todayDay === 0 ? 6 : todayDay - 1;
 
-    // Track months for labels
+    const thisWeekMonday = new Date(endDate);
+    thisWeekMonday.setDate(thisWeekMonday.getDate() - daysFromMonday);
+
+    // Go back 25 more weeks (26 weeks total)
+    const paddedStartDate = new Date(thisWeekMonday);
+    paddedStartDate.setDate(paddedStartDate.getDate() - (25 * 7));
+
+    const paddedEndDate = new Date(endDate);
+
+    // Track months for labels and days
     let currentMonth = -1;
     let monthLabels = [];
     let weekCount = 0;
+    let daysInGrid = new Set();
 
-    // Generate squares
-    let currentDate = new Date(startDate);
+    // Generate squares organized by weeks (Mon-Sun)
     const squares = [];
+    let currentDate = new Date(paddedStartDate);
 
-    while (currentDate <= endDate) {
+    let totalDays = 0;
+    while (currentDate <= paddedEndDate) {
       const dateStr = currentDate.toISOString().split('T')[0];
       const dayData = this.data[dateStr];
-      const value = dayData ? dayData[metric] : null;
+      const dayOfWeek = currentDate.getDay();
+
+      totalDays++;
+      // Track which days of the week are present in the grid
+      daysInGrid.add(dayOfWeek);
+
+      // If date is before our data starts or after today, show as empty
+      const isBeforeData = currentDate < startDate;
+      const isAfterToday = currentDate > endDate;
+      const value = (isBeforeData || isAfterToday || !dayData) ? null : dayData[metric];
       const intensity = this.getIntensityLevel(value, metric);
 
       const square = document.createElement('div');
@@ -159,17 +184,17 @@ class HealthDashboard {
       square.addEventListener('mouseleave', () => this.hideTooltip());
       square.addEventListener('mousemove', (e) => this.updateTooltipPosition(e));
 
-      // Track month changes for labels
+      // Track month changes for labels - check if this is the first day of the week (Monday)
       const month = currentDate.getMonth();
-      if (month !== currentMonth) {
+      if (month !== currentMonth && dayOfWeek === 1) {
         currentMonth = month;
         monthLabels.push({ month, weekIndex: weekCount });
       }
 
       squares.push(square);
 
-      // Increment week count on Sundays
-      if (currentDate.getDay() === 0) {
+      // Increment week count after Sunday (day 0)
+      if (dayOfWeek === 0) {
         weekCount++;
       }
 
@@ -179,9 +204,21 @@ class HealthDashboard {
     // Add squares to grid
     squares.forEach(square => grid.appendChild(square));
 
+    // Render day labels dynamically based on which days are in the grid
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    // Monday-first order (1=Mon, 2=Tue, ..., 6=Sat, 0=Sun)
+    const dayOrder = [1, 2, 3, 4, 5, 6, 0]; // Mon through Sun
+
+    dayOrder.forEach(dayIndex => {
+      if (daysInGrid.has(dayIndex)) {
+        const span = document.createElement('span');
+        span.textContent = dayNames[dayIndex];
+        daysContainer.appendChild(span);
+      }
+    });
+
     // Render month labels
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const totalWeeks = Math.ceil(squares.length / 7);
 
     // Create month label spans based on week positions
     for (let i = 0; i < monthLabels.length; i++) {
@@ -200,6 +237,12 @@ class HealthDashboard {
     }
   }
 
+  /**
+   * @param {MouseEvent} event
+   * @param {string} date
+   * @param {number|null} value
+   * @param {string} metric
+   */
   showTooltip(event, date, value, metric) {
     const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
       weekday: 'short',
@@ -211,26 +254,35 @@ class HealthDashboard {
     const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
     const formattedValue = this.formatValue(value, metric);
 
-    this.tooltip.innerHTML = `
-      <strong>${formattedDate}</strong><br>
-      ${metricName}: ${formattedValue}
-    `;
+    if (this.tooltip) {
+      this.tooltip.innerHTML = `
+        <strong>${formattedDate}</strong><br>
+        ${metricName}: ${formattedValue}
+      `;
 
-    this.tooltip.classList.add('show');
+      this.tooltip.classList.add('show');
+    }
     this.updateTooltipPosition(event);
   }
 
+  /**
+   * @param {MouseEvent} event
+   */
   updateTooltipPosition(event) {
-    const x = event.clientX;
-    const y = event.clientY;
+    if (this.tooltip) {
+      const x = event.clientX;
+      const y = event.clientY;
 
-    // Position tooltip above and to the right of cursor
-    this.tooltip.style.left = `${x + 15}px`;
-    this.tooltip.style.top = `${y - 15}px`;
+      // Position tooltip above and to the right of cursor
+      this.tooltip.style.left = `${x + 15}px`;
+      this.tooltip.style.top = `${y - 15}px`;
+    }
   }
 
   hideTooltip() {
-    this.tooltip.classList.remove('show');
+    if (this.tooltip) {
+      this.tooltip.classList.remove('show');
+    }
   }
 }
 
