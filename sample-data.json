@@ -1,0 +1,16 @@
+{
+  "2024-10-01": { "sleep": 85, "steps": 8500, "activity": 35 },
+  "2024-10-02": { "sleep": 78, "steps": 6200, "activity": 25 },
+  "2024-10-03": { "sleep": 92, "steps": 11200, "activity": 48 },
+  "2024-10-04": { "sleep": 88, "steps": 9800, "activity": 42 },
+  "2024-10-05": { "sleep": 76, "steps": 5500, "activity": 20 },
+  "2024-10-06": { "sleep": 82, "steps": 7800, "activity": 30 },
+  "2024-10-07": { "sleep": 90, "steps": 10500, "activity": 45 },
+  "2024-10-08": { "sleep": 85, "steps": 9200, "activity": 38 },
+  "2024-10-09": { "sleep": 79, "steps": 6800, "activity": 28 },
+  "2024-10-10": { "sleep": 94, "steps": 12100, "activity": 52 },
+  "2024-10-11": { "sleep": 87, "steps": 8900, "activity": 40 },
+  "2024-10-12": { "sleep": 81, "steps": 7200, "activity": 32 },
+  "2024-10-13": { "sleep": 75, "steps": 5900, "activity": 22 },
+  "2024-10-14": { "sleep": 89, "steps": 10200, "activity": 44 }
+}

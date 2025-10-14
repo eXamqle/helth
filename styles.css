@@ -149,3 +149,196 @@ footer {
 html {
     scroll-behavior: smooth;
 }
+
+/* Health Dashboard Styles */
+.health-dashboard {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+/* Metric Toggle Buttons */
+.metric-toggles {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.metric-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.metric-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.metric-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Heatmap Container */
+.heatmap-container {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
+
+.heatmap-months {
+    display: flex;
+    margin-bottom: 0.5rem;
+    padding-left: 40px;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.heatmap-months span {
+    flex: 1;
+    min-width: 13px;
+}
+
+.heatmap-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.heatmap-days {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 0.7rem;
+    color: #666;
+    padding-right: 8px;
+    min-width: 32px;
+}
+
+.heatmap-days span {
+    height: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-rows: repeat(7, 13px);
+    grid-auto-flow: column;
+    gap: 3px;
+    position: relative;
+}
+
+.heatmap-square {
+    width: 13px;
+    height: 13px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.heatmap-square:hover {
+    outline: 2px solid rgba(0, 0, 0, 0.3);
+    outline-offset: 1px;
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+.heatmap-square.empty {
+    background: #ebedf0;
+}
+
+/* Sleep Colors (Blue) */
+.heatmap-square.sleep-0 { background: #ebedf0; }
+.heatmap-square.sleep-1 { background: #9be9a8; }
+.heatmap-square.sleep-2 { background: #40c463; }
+.heatmap-square.sleep-3 { background: #30a14e; }
+.heatmap-square.sleep-4 { background: #216e39; }
+
+/* Steps Colors (Green) */
+.heatmap-square.steps-0 { background: #ebedf0; }
+.heatmap-square.steps-1 { background: #c6e48b; }
+.heatmap-square.steps-2 { background: #7bc96f; }
+.heatmap-square.steps-3 { background: #239a3b; }
+.heatmap-square.steps-4 { background: #196127; }
+
+/* Activity Colors (Orange) */
+.heatmap-square.activity-0 { background: #ebedf0; }
+.heatmap-square.activity-1 { background: #ffd59e; }
+.heatmap-square.activity-2 { background: #ffa940; }
+.heatmap-square.activity-3 { background: #fa8c16; }
+.heatmap-square.activity-4 { background: #d46b08; }
+
+/* Tooltip */
+.heatmap-tooltip {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+    display: none;
+}
+
+.heatmap-tooltip.show {
+    display: block;
+}
+
+/* Legend */
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #666;
+    justify-content: flex-end;
+}
+
+.legend-colors {
+    display: flex;
+    gap: 3px;
+}
+
+.legend-square {
+    width: 13px;
+    height: 13px;
+    border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .health-dashboard {
+        padding: 1rem;
+    }
+
+    .metric-toggles {
+        gap: 0.5rem;
+    }
+
+    .metric-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        min-width: 80px;
+    }
+
+    .heatmap-days {
+        font-size: 0.6rem;
+        min-width: 28px;
+    }
+}

@@ -36,28 +36,36 @@
         </header>
 
         <main>
-            <section class="card">
-                <h2>Welcome</h2>
-                <p>This is a Progressive Web App that works offline and can be installed on your iOS device.</p>
-            </section>
+            <!-- Health Activity Dashboard -->
+            <section class="health-dashboard">
+                <div class="metric-toggles">
+                    <button class="metric-btn active" data-metric="sleep">Sleep Score</button>
+                    <button class="metric-btn" data-metric="steps">Steps</button>
+                    <button class="metric-btn" data-metric="activity">Activity</button>
+                </div>
 
-            <section class="card">
-                <h3>Installation Instructions</h3>
-                <ol>
-                    <li>Tap the Share button in Safari</li>
-                    <li>Scroll down and tap "Add to Home Screen"</li>
-                    <li>Tap "Add" to install the app</li>
-                </ol>
-            </section>
-
-            <section class="card">
-                <h3>Features</h3>
-                <ul>
-                    <li>Works offline</li>
-                    <li>Full-screen experience</li>
-                    <li>Fast and lightweight</li>
-                    <li>No app store required</li>
-                </ul>
+                <div class="heatmap-container">
+                    <div class="heatmap-months" id="heatmap-months"></div>
+                    <div class="heatmap-wrapper">
+                        <div class="heatmap-days">
+                            <span>Mon</span>
+                            <span>Wed</span>
+                            <span>Fri</span>
+                        </div>
+                        <div class="heatmap-grid" id="heatmap-grid"></div>
+                    </div>
+                    <div class="heatmap-legend">
+                        <span>Less</span>
+                        <div class="legend-colors" id="legend-colors">
+                            <div class="legend-square"></div>
+                            <div class="legend-square"></div>
+                            <div class="legend-square"></div>
+                            <div class="legend-square"></div>
+                            <div class="legend-square"></div>
+                        </div>
+                        <span>More</span>
+                    </div>
+                </div>
             </section>
 
             <div class="status">
@@ -70,6 +78,7 @@
         </footer>
     </div>
 
+    <script src="health.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

@@ -4,6 +4,8 @@ const urlsToCache = [
   '/helth/index.html',
   '/helth/styles.css',
   '/helth/app.js',
+  '/helth/health.js',
+  '/helth/sample-data.json',
   '/helth/manifest.json',
   '/helth/icon-192.png',
   '/helth/icon-512.png'
