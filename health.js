@@ -204,16 +204,28 @@ class HealthDashboard {
     // Add squares to grid
     squares.forEach(square => grid.appendChild(square));
 
-    // Render day labels dynamically based on which days are in the grid
+    // Render day labels: Mon at row 2, Wed at row 4, Fri at row 6
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     // Monday-first order (1=Mon, 2=Tue, ..., 6=Sat, 0=Sun)
     const dayOrder = [1, 2, 3, 4, 5, 6, 0]; // Mon through Sun
 
+    // Row indices: 0=empty, 1=Mon, 2=empty, 3=Wed, 4=empty, 5=Fri, 6=empty
+    let rowIndex = 0;
     dayOrder.forEach(dayIndex => {
       if (daysInGrid.has(dayIndex)) {
         const span = document.createElement('span');
-        span.textContent = dayNames[dayIndex];
+        // Show Mon at rowIndex 1, Wed at 3, Fri at 5
+        if (rowIndex === 1) {
+          span.textContent = dayNames[1]; // Mon
+        } else if (rowIndex === 3) {
+          span.textContent = dayNames[3]; // Wed
+        } else if (rowIndex === 5) {
+          span.textContent = dayNames[5]; // Fri
+        } else {
+          span.textContent = ''; // Empty label for other rows
+        }
         daysContainer.appendChild(span);
+        rowIndex++;
       }
     });
 
