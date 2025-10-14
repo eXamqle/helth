@@ -1,0 +1,12 @@
+# Icon Placeholders
+
+You need to create two icon files:
+- icon-192.png (192x192 pixels)
+- icon-512.png (512x512 pixels)
+
+These should be your app's logo/icon. You can:
+1. Use an online tool like https://realfavicongenerator.net/
+2. Create them in a graphics editor
+3. Use a simple icon generator
+
+For now, you can use any square PNG image and rename it, or create simple colored squares as placeholders.
