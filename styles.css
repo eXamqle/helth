@@ -25,7 +25,7 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-y: hidden;
+    overflow-y: auto;
     margin-top: 10px;
 }
 
@@ -178,7 +178,7 @@ footer {
 /* Smooth Scrolling */
 html {
     scroll-behavior: smooth;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 /* Health Dashboard Styles */
