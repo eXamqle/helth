@@ -4,7 +4,7 @@ class HealthDashboard {
   constructor() {
     this.data = {};
     this.tooltip = null;
-    this.metrics = ['sleep', 'steps', 'activity'];
+    this.metrics = ['sleep', 'steps', 'activity', 'mood'];
     this.init();
   }
 
@@ -12,6 +12,11 @@ class HealthDashboard {
     await this.loadData();
     this.createTooltip();
     this.renderAllHeatmaps();
+    this.renderLineChart();
+    this.renderPieChart('sleep');
+    this.renderPieChart('steps');
+    this.renderPieChart('activity');
+    this.renderPieChart('mood');
   }
 
   async loadData() {
@@ -44,9 +49,10 @@ class HealthDashboard {
       const dateStr = currentDate.toISOString().split('T')[0];
 
       data[dateStr] = {
-        sleep: Math.floor(Math.random() * 40) + 60,
-        steps: Math.floor(Math.random() * 12000) + 2000,
-        activity: Math.floor(Math.random() * 60) + 10
+        sleep: Math.floor(Math.random() * 50) + 50,  // 50-100 range
+        steps: Math.floor(Math.random() * 15000) + 2000,  // 2000-17000 range
+        activity: Math.floor(Math.random() * 70) + 10,  // 10-80 range
+        mood: Math.floor(Math.random() * 7) + 1  // 1-7 scale
       };
 
       currentDate.setDate(currentDate.getDate() + 1);
@@ -72,28 +78,103 @@ class HealthDashboard {
 
     switch(metric) {
       case 'sleep':
-        if (value >= 90) return 4;
-        if (value >= 75) return 3;
-        if (value >= 60) return 2;
-        if (value > 0) return 1;
+        if (value >= 95) return 8;  // 100-95
+        if (value >= 90) return 7;  // 95-90
+        if (value >= 85) return 6;  // 90-85
+        if (value >= 80) return 5;  // 85-80
+        if (value >= 75) return 4;  // 80-75
+        if (value >= 65) return 3;  // 75-65
+        if (value >= 55) return 2;  // 65-55
+        if (value >= 50) return 1;  // 55-50
         return 0;
 
       case 'steps':
-        if (value >= 10000) return 4;
-        if (value >= 7500) return 3;
-        if (value >= 5000) return 2;
-        if (value >= 2500) return 1;
+        if (value >= 15000) return 8;
+        if (value >= 12500) return 7;
+        if (value >= 10000) return 6;
+        if (value >= 7500) return 5;
+        if (value >= 5000) return 4;
+        if (value >= 3500) return 3;
+        if (value >= 2000) return 2;
+        if (value > 0) return 1;
         return 0;
 
       case 'activity':
-        if (value >= 45) return 4;
-        if (value >= 30) return 3;
-        if (value >= 15) return 2;
+        if (value >= 70) return 8;
+        if (value >= 60) return 7;
+        if (value >= 50) return 6;
+        if (value >= 40) return 5;
+        if (value >= 30) return 4;
+        if (value >= 20) return 3;
+        if (value >= 10) return 2;
         if (value > 0) return 1;
+        return 0;
+
+      case 'mood':
+        // Mood is 1-7 scale, return as-is
+        if (value >= 1 && value <= 7) return value;
         return 0;
 
       default:
         return 0;
+    }
+  }
+
+  getLegendRanges(metric) {
+    switch(metric) {
+      case 'sleep':
+        return [
+          'No data',
+          '50-54',
+          '55-64',
+          '65-74',
+          '75-79',
+          '80-84',
+          '85-89',
+          '90-94',
+          '95-100'
+        ];
+
+      case 'steps':
+        return [
+          'No data',
+          '1-1,999',
+          '2,000-3,499',
+          '3,500-4,999',
+          '5,000-7,499',
+          '7,500-9,999',
+          '10,000-12,499',
+          '12,500-14,999',
+          '15,000+'
+        ];
+
+      case 'activity':
+        return [
+          'No data',
+          '1-9 min',
+          '10-19 min',
+          '20-29 min',
+          '30-39 min',
+          '40-49 min',
+          '50-59 min',
+          '60-69 min',
+          '70+ min'
+        ];
+
+      case 'mood':
+        return [
+          'No data',
+          'Very Unpleasant',
+          'Unpleasant',
+          'Slightly Unpleasant',
+          'Neutral',
+          'Slightly Pleasant',
+          'Pleasant',
+          'Very Pleasant'
+        ];
+
+      default:
+        return ['No data', 'Low', 'Medium', 'High', 'Very High'];
     }
   }
 
@@ -107,6 +188,9 @@ class HealthDashboard {
         return `${value.toLocaleString()} steps`;
       case 'activity':
         return `${value} minutes`;
+      case 'mood':
+        const moodLabels = ['', 'Very Unpleasant', 'Unpleasant', 'Slightly Unpleasant', 'Neutral', 'Slightly Pleasant', 'Pleasant', 'Very Pleasant'];
+        return moodLabels[value] || value;
       default:
         return value;
     }
@@ -117,6 +201,7 @@ class HealthDashboard {
     const monthsContainer = document.getElementById(`heatmap-months-${metric}`);
     const legendColors = document.getElementById(`legend-colors-${metric}`);
     const daysContainer = document.getElementById(`heatmap-days-${metric}`);
+    const averageElement = document.getElementById(`average-${metric}`);
 
     if (!grid || !monthsContainer || !legendColors || !daysContainer) return;
 
@@ -158,6 +243,9 @@ class HealthDashboard {
     let currentDate = new Date(paddedStartDate);
 
     let totalDays = 0;
+    let totalValue = 0;
+    let daysWithData = 0;
+
     while (currentDate <= paddedEndDate) {
       const dateStr = currentDate.toISOString().split('T')[0];
       const dayData = this.data[dateStr];
@@ -172,6 +260,12 @@ class HealthDashboard {
       const isAfterToday = currentDate > endDate;
       const value = (isBeforeData || isAfterToday || !dayData) ? null : dayData[metric];
       const intensity = this.getIntensityLevel(value, metric);
+
+      // Track average calculation (only for dates with data within range)
+      if (!isBeforeData && !isAfterToday && dayData && dayData[metric] !== null && dayData[metric] !== undefined) {
+        totalValue += dayData[metric];
+        daysWithData++;
+      }
 
       const square = document.createElement('div');
       square.className = `heatmap-square ${metric}-${intensity}`;
@@ -241,11 +335,54 @@ class HealthDashboard {
       monthsContainer.appendChild(span);
     }
 
-    // Update legend colors
-    for (let i = 0; i <= 4; i++) {
+    // Update legend colors with tooltips
+    const legendRanges = this.getLegendRanges(metric);
+    const maxLevel = metric === 'mood' ? 7 : 8;  // All metrics now have 8 levels (7 data + 1 no-data)
+
+    for (let i = 0; i <= maxLevel; i++) {
       const square = document.createElement('div');
       square.className = `legend-square ${metric}-${i}`;
+      square.title = legendRanges[i];
+
+      // Add hover/click tooltip functionality
+      square.addEventListener('mouseenter', (e) => {
+        if (this.tooltip) {
+          this.tooltip.innerHTML = `<strong>${legendRanges[i]}</strong>`;
+          this.tooltip.classList.add('show');
+          this.updateTooltipPosition(e);
+        }
+      });
+      square.addEventListener('mouseleave', () => this.hideTooltip());
+      square.addEventListener('mousemove', (e) => this.updateTooltipPosition(e));
+
       legendColors.appendChild(square);
+    }
+
+    // Calculate and display average
+    if (averageElement && daysWithData > 0) {
+      const average = totalValue / daysWithData;
+      let formattedAverage;
+
+      switch(metric) {
+        case 'sleep':
+          formattedAverage = `Avg: ${Math.round(average)}`;
+          break;
+        case 'steps':
+          formattedAverage = `Avg: ${Math.round(average).toLocaleString()}`;
+          break;
+        case 'activity':
+          formattedAverage = `Avg: ${Math.round(average)} min`;
+          break;
+        case 'mood':
+          const moodLabels = ['', 'Very Unpleasant', 'Unpleasant', 'Slightly Unpleasant', 'Neutral', 'Slightly Pleasant', 'Pleasant', 'Very Pleasant'];
+          const roundedAvg = Math.round(average);
+          formattedAverage = `Avg: ${moodLabels[roundedAvg] || roundedAvg}`;
+          break;
+        default:
+          formattedAverage = `Avg: ${Math.round(average)}`;
+      }
+
+      averageElement.textContent = formattedAverage;
     }
   }
 
@@ -295,6 +432,195 @@ class HealthDashboard {
     if (this.tooltip) {
       this.tooltip.classList.remove('show');
     }
+  }
+
+  renderLineChart() {
+    const canvas = document.getElementById('line-chart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+
+    // Get last 30 days of data
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+
+    const labels = [];
+    const sleepData = [];
+    const stepsData = [];
+    const activityData = [];
+    const moodData = [];
+
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      const dateStr = currentDate.toISOString().split('T')[0];
+      const dayData = this.data[dateStr];
+
+      labels.push(currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      sleepData.push(dayData ? dayData.sleep : null);
+      stepsData.push(dayData ? dayData.steps / 100 : null); // Scale down for visibility
+      activityData.push(dayData ? dayData.activity : null);
+      moodData.push(dayData ? dayData.mood * 10 : null); // Scale up for visibility
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Sleep Score',
+            data: sleepData,
+            borderColor: '#7992f5',
+            backgroundColor: 'rgba(121, 146, 245, 0.1)',
+            tension: 0.4
+          },
+          {
+            label: 'Steps (÷100)',
+            data: stepsData,
+            borderColor: '#26a641',
+            backgroundColor: 'rgba(38, 166, 65, 0.1)',
+            tension: 0.4
+          },
+          {
+            label: 'Activity (min)',
+            data: activityData,
+            borderColor: '#fb923c',
+            backgroundColor: 'rgba(251, 146, 60, 0.1)',
+            tension: 0.4
+          },
+          {
+            label: 'Mood (×10)',
+            data: moodData,
+            borderColor: '#ffd600',
+            backgroundColor: 'rgba(255, 214, 0, 0.1)',
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#b6b6bb'
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#b6b6bb'
+            },
+            grid: {
+              color: 'rgba(182, 182, 187, 0.1)'
+            }
+          },
+          x: {
+            ticks: {
+              color: '#b6b6bb',
+              maxRotation: 45,
+              minRotation: 45
+            },
+            grid: {
+              color: 'rgba(182, 182, 187, 0.1)'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  renderPieChart(metric) {
+    const canvas = document.getElementById(`pie-chart-${metric}`);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+
+    // Calculate distribution percentages
+    const maxLevel = metric === 'mood' ? 7 : 8;
+    const levelCounts = Array(maxLevel + 1).fill(0);
+    const totalDays = Object.keys(this.data).length;
+
+    Object.values(this.data).forEach(day => {
+      if (day[metric]) {
+        const level = this.getIntensityLevel(day[metric], metric);
+        levelCounts[level]++;
+      }
+    });
+
+    // Get colors for this metric
+    const colorMaps = {
+      sleep: ['#28272d', '#303470', '#323c7d', '#3d4f9e', '#4e65cd', '#5f7ae6', '#7992f5', '#a6b5f9', '#d2dcff'],
+      steps: ['#28272d', '#0a3318', '#0e4429', '#00581e', '#006d32', '#128a3f', '#26a641', '#39d353', '#57ff78'],
+      activity: ['#28272d', '#5a1e0a', '#7c2d12', '#9a3412', '#c2410c', '#ea580c', '#fb923c', '#fdba74', '#fed7aa'],
+      mood: ['#28272d', '#2d187c', '#013ebe', '#0060bb', '#3c9da8', '#2d9800', '#ffd600', '#fe7530']
+    };
+
+    // Convert counts to percentages and create labels
+    const labels = [];
+    const data = [];
+    const colors = colorMaps[metric];
+    const ranges = this.getLegendRanges(metric);
+
+    levelCounts.forEach((count, level) => {
+      if (count > 0) {
+        const percentage = ((count / totalDays) * 100).toFixed(1);
+        labels.push(`${ranges[level]}: ${percentage}%`);
+        data.push(count);
+      }
+    });
+
+    // Get metric display name
+    const metricNames = {
+      sleep: 'Sleep Score',
+      steps: 'Steps',
+      activity: 'Activity',
+      mood: 'State of Mind'
+    };
+
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colors.filter((_, i) => levelCounts[i] > 0),
+          borderColor: '#2d333b',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#b6b6bb',
+              padding: 8,
+              font: {
+                size: 10
+              },
+              boxWidth: 12
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                return `${context.label.split(':')[0]}: ${percentage}%`;
+              }
+            }
+          }
+        }
+      }
+    });
   }
 }
 

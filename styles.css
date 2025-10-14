@@ -31,12 +31,18 @@ body {
 
 /* iOS Safe Area Support */
 .container {
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
     padding: env(safe-area-inset-top, 15px) env(safe-area-inset-right, 15px) env(safe-area-inset-bottom, 15px) env(safe-area-inset-left, 15px);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 600px;
+    }
 }
 
 /* Header */
@@ -64,6 +70,24 @@ header h1 {
 /* Main Content */
 main {
     flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+}
+
+@media (min-width: 1600px) {
+    main {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        display: flex;
+        flex-direction: column;
+        overflow-x: auto;
+    }
 }
 
 .card {
@@ -162,15 +186,49 @@ html {
     background: var(--card-bg);
     border-radius: 12px;
     padding: 1rem 1.25rem;
-    margin-bottom: 1rem;
     box-shadow: var(--shadow);
+    margin-bottom: 0;
+}
+
+.chart-section {
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+}
+
+.chart-section canvas {
+    flex: 1;
+    max-height: 400px;
+}
+
+@media (max-width: 768px) {
+    .health-dashboard {
+        margin-bottom: 1rem;
+    }
+
+    .chart-section canvas {
+        max-height: 300px;
+    }
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
 }
 
 .metric-title {
     color: var(--primary-color);
-    margin-bottom: 0.75rem;
     font-size: 1.5rem;
     font-weight: 600;
+    margin: 0;
+}
+
+.metric-average {
+    color: #888;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 /* Heatmap Container */
@@ -184,7 +242,7 @@ html {
     margin-bottom: 0.25rem;
     padding-left: 38px;
     font-size: 0.8rem;
-    color: #666;
+    color: #b6b6bb;
 }
 
 .heatmap-months span {
@@ -202,7 +260,7 @@ html {
     grid-template-rows: repeat(7, 18px);
     gap: 2px;
     font-size: 0.75rem;
-    color: #666;
+    color: #b6b6bb;
     padding-right: 6px;
     min-width: 32px;
 }
@@ -244,26 +302,48 @@ html {
     border: 1px solid #444d56;
 }
 
-/* Sleep Colors (Blue - exact GitLab colors) */
-.heatmap-square.sleep-0 { background: #333c47; }
-.heatmap-square.sleep-1 { background: #4c5f82; }
-.heatmap-square.sleep-2 { background: #6b8cce; }
-.heatmap-square.sleep-3 { background: #7ba4e6; }
-.heatmap-square.sleep-4 { background: #b8d7ff; }
+/* Sleep Colors (Blue gradient - 8 levels) */
+.heatmap-square.sleep-0, .legend-square.sleep-0 { background: #28272d; }
+.heatmap-square.sleep-1, .legend-square.sleep-1 { background: #303470; }
+.heatmap-square.sleep-2, .legend-square.sleep-2 { background: #323c7d; }
+.heatmap-square.sleep-3, .legend-square.sleep-3 { background: #3d4f9e; }
+.heatmap-square.sleep-4, .legend-square.sleep-4 { background: #4e65cd; }
+.heatmap-square.sleep-5, .legend-square.sleep-5 { background: #5f7ae6; }
+.heatmap-square.sleep-6, .legend-square.sleep-6 { background: #7992f5; }
+.heatmap-square.sleep-7, .legend-square.sleep-7 { background: #a6b5f9; }
+.heatmap-square.sleep-8, .legend-square.sleep-8 { background: #d2dcff; }
 
-/* Steps Colors (Green - GitLab style) */
-.heatmap-square.steps-0 { background: #333c47; }
-.heatmap-square.steps-1 { background: #0e4429; }
-.heatmap-square.steps-2 { background: #006d32; }
-.heatmap-square.steps-3 { background: #26a641; }
-.heatmap-square.steps-4 { background: #39d353; }
+/* Steps Colors (Green - 8 levels) */
+.heatmap-square.steps-0, .legend-square.steps-0 { background: #28272d; }
+.heatmap-square.steps-1, .legend-square.steps-1 { background: #0a3318; }
+.heatmap-square.steps-2, .legend-square.steps-2 { background: #0e4429; }
+.heatmap-square.steps-3, .legend-square.steps-3 { background: #00581e; }
+.heatmap-square.steps-4, .legend-square.steps-4 { background: #006d32; }
+.heatmap-square.steps-5, .legend-square.steps-5 { background: #128a3f; }
+.heatmap-square.steps-6, .legend-square.steps-6 { background: #26a641; }
+.heatmap-square.steps-7, .legend-square.steps-7 { background: #39d353; }
+.heatmap-square.steps-8, .legend-square.steps-8 { background: #57ff78; }
 
-/* Activity Colors (Orange - GitLab style) */
-.heatmap-square.activity-0 { background: #333c47; }
-.heatmap-square.activity-1 { background: #7c2d12; }
-.heatmap-square.activity-2 { background: #c2410c; }
-.heatmap-square.activity-3 { background: #ea580c; }
-.heatmap-square.activity-4 { background: #fb923c; }
+/* Activity Colors (Orange - 8 levels) */
+.heatmap-square.activity-0, .legend-square.activity-0 { background: #28272d; }
+.heatmap-square.activity-1, .legend-square.activity-1 { background: #5a1e0a; }
+.heatmap-square.activity-2, .legend-square.activity-2 { background: #7c2d12; }
+.heatmap-square.activity-3, .legend-square.activity-3 { background: #9a3412; }
+.heatmap-square.activity-4, .legend-square.activity-4 { background: #c2410c; }
+.heatmap-square.activity-5, .legend-square.activity-5 { background: #ea580c; }
+.heatmap-square.activity-6, .legend-square.activity-6 { background: #fb923c; }
+.heatmap-square.activity-7, .legend-square.activity-7 { background: #fdba74; }
+.heatmap-square.activity-8, .legend-square.activity-8 { background: #fed7aa; }
+
+/* State of Mind Colors (7 levels - Pleasant gradient) */
+.heatmap-square.mood-0, .legend-square.mood-0 { background: #28272d; }
+.heatmap-square.mood-1, .legend-square.mood-1 { background: #2d187c; }
+.heatmap-square.mood-2, .legend-square.mood-2 { background: #013ebe; }
+.heatmap-square.mood-3, .legend-square.mood-3 { background: #0060bb; }
+.heatmap-square.mood-4, .legend-square.mood-4 { background: #3c9da8; }
+.heatmap-square.mood-5, .legend-square.mood-5 { background: #2d9800; }
+.heatmap-square.mood-6, .legend-square.mood-6 { background: #ffd600; }
+.heatmap-square.mood-7, .legend-square.mood-7 { background: #fe7530; }
 
 /* Tooltip */
 .heatmap-tooltip {
@@ -287,11 +367,16 @@ html {
 .heatmap-legend {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     margin-top: 0.5rem;
     font-size: 0.75rem;
-    color: #666;
+    color: #b6b6bb;
     justify-content: flex-end;
+}
+
+.legend-label {
+    font-size: 0.7rem;
+    color: #b6b6bb;
 }
 
 .legend-colors {
@@ -303,6 +388,14 @@ html {
     width: 11px;
     height: 11px;
     border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.legend-square:hover {
+    transform: scale(1.2);
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+    outline-offset: 1px;
 }
 
 /* Responsive */

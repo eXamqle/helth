@@ -33,7 +33,10 @@
         <main>
             <!-- Sleep Score Graph -->
             <section class="health-dashboard">
-                <h2 class="metric-title">Sleep Score</h2>
+                <div class="metric-header">
+                    <h2 class="metric-title">Sleep Score</h2>
+                    <div class="metric-average" id="average-sleep">Avg: --</div>
+                </div>
                 <div class="heatmap-container">
                     <div class="heatmap-months" id="heatmap-months-sleep"></div>
                     <div class="heatmap-wrapper">
@@ -41,14 +44,19 @@
                         <div class="heatmap-grid" id="heatmap-grid-sleep"></div>
                     </div>
                     <div class="heatmap-legend">
+                        <span class="legend-label">Less</span>
                         <div class="legend-colors" id="legend-colors-sleep"></div>
+                        <span class="legend-label">More</span>
                     </div>
                 </div>
             </section>
 
             <!-- Steps Graph -->
             <section class="health-dashboard">
-                <h2 class="metric-title">Steps</h2>
+                <div class="metric-header">
+                    <h2 class="metric-title">Steps</h2>
+                    <div class="metric-average" id="average-steps">Avg: --</div>
+                </div>
                 <div class="heatmap-container">
                     <div class="heatmap-months" id="heatmap-months-steps"></div>
                     <div class="heatmap-wrapper">
@@ -56,14 +64,19 @@
                         <div class="heatmap-grid" id="heatmap-grid-steps"></div>
                     </div>
                     <div class="heatmap-legend">
+                        <span class="legend-label">Less</span>
                         <div class="legend-colors" id="legend-colors-steps"></div>
+                        <span class="legend-label">More</span>
                     </div>
                 </div>
             </section>
 
             <!-- Activity Graph -->
             <section class="health-dashboard">
-                <h2 class="metric-title">Activity</h2>
+                <div class="metric-header">
+                    <h2 class="metric-title">Activity</h2>
+                    <div class="metric-average" id="average-activity">Avg: --</div>
+                </div>
                 <div class="heatmap-container">
                     <div class="heatmap-months" id="heatmap-months-activity"></div>
                     <div class="heatmap-wrapper">
@@ -71,9 +84,70 @@
                         <div class="heatmap-grid" id="heatmap-grid-activity"></div>
                     </div>
                     <div class="heatmap-legend">
+                        <span class="legend-label">Less</span>
                         <div class="legend-colors" id="legend-colors-activity"></div>
+                        <span class="legend-label">More</span>
                     </div>
                 </div>
+            </section>
+
+            <!-- State of Mind Graph -->
+            <section class="health-dashboard">
+                <div class="metric-header">
+                    <h2 class="metric-title">State of Mind</h2>
+                </div>
+                <div class="heatmap-container">
+                    <div class="heatmap-months" id="heatmap-months-mood"></div>
+                    <div class="heatmap-wrapper">
+                        <div class="heatmap-days" id="heatmap-days-mood"></div>
+                        <div class="heatmap-grid" id="heatmap-grid-mood"></div>
+                    </div>
+                    <div class="heatmap-legend">
+                        <span class="legend-label">Unpleasant</span>
+                        <div class="legend-colors" id="legend-colors-mood"></div>
+                        <span class="legend-label">Pleasant</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Correlation Line Chart -->
+            <section class="health-dashboard chart-section">
+                <div class="metric-header">
+                    <h2 class="metric-title">Trends & Correlation</h2>
+                </div>
+                <canvas id="line-chart"></canvas>
+            </section>
+
+            <!-- Sleep Distribution -->
+            <section class="health-dashboard chart-section">
+                <div class="metric-header">
+                    <h2 class="metric-title">Sleep Distribution</h2>
+                </div>
+                <canvas id="pie-chart-sleep"></canvas>
+            </section>
+
+            <!-- Steps Distribution -->
+            <section class="health-dashboard chart-section">
+                <div class="metric-header">
+                    <h2 class="metric-title">Steps Distribution</h2>
+                </div>
+                <canvas id="pie-chart-steps"></canvas>
+            </section>
+
+            <!-- Activity Distribution -->
+            <section class="health-dashboard chart-section">
+                <div class="metric-header">
+                    <h2 class="metric-title">Activity Distribution</h2>
+                </div>
+                <canvas id="pie-chart-activity"></canvas>
+            </section>
+
+            <!-- Mood Distribution -->
+            <section class="health-dashboard chart-section">
+                <div class="metric-header">
+                    <h2 class="metric-title">Mood Distribution</h2>
+                </div>
+                <canvas id="pie-chart-mood"></canvas>
             </section>
 
             <!-- <div class="status">
@@ -82,6 +156,7 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="health.js"></script>
     <script src="app.js"></script>
 </body>
