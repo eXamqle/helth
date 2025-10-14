@@ -1,7 +1,7 @@
 // Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/helth/service-worker.js')
+    navigator.serviceWorker.register('./service-worker.js')
       .then((registration) => {
         console.log('Service Worker registered successfully:', registration.scope);
       })
@@ -14,6 +14,8 @@ if ('serviceWorker' in navigator) {
 // Update online/offline status
 function updateOnlineStatus() {
   const statusElement = document.getElementById('status');
+  if (!statusElement) return; // Exit if element doesn't exist
+
   if (navigator.onLine) {
     statusElement.textContent = 'Online';
     statusElement.className = 'online';

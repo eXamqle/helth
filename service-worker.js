@@ -1,15 +1,15 @@
 // @ts-nocheck
 const CACHE_NAME = 'pwa-cache-v1';
 const urlsToCache = [
-  '/helth/',
-  '/helth/index.html',
-  '/helth/styles.css',
-  '/helth/app.js',
-  '/helth/health.js',
-  '/helth/sample-data.json',
-  '/helth/manifest.json',
-  '/helth/icon-192.png',
-  '/helth/icon-512.png'
+  './',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './health.js',
+  './sample-data.json',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 // Install event - cache resources
@@ -76,7 +76,7 @@ self.addEventListener('fetch', (event) => {
       })
       .catch(() => {
         // Return offline page if available
-        return caches.match('/helth/index.html');
+        return caches.match('./index.html');
       })
   );
 });
