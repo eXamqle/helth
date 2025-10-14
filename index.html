@@ -30,39 +30,65 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>My PWA App</h1>
-            <p class="subtitle">Lightweight & Portable</p>
-        </header>
-
         <main>
-            <!-- Health Activity Dashboard -->
+            <!-- Sleep Score Graph -->
             <section class="health-dashboard">
-                <div class="metric-toggles">
-                    <button class="metric-btn active" data-metric="sleep">Sleep Score</button>
-                    <button class="metric-btn" data-metric="steps">Steps</button>
-                    <button class="metric-btn" data-metric="activity">Activity</button>
-                </div>
-
+                <h2 class="metric-title">Sleep Score</h2>
                 <div class="heatmap-container">
-                    <div class="heatmap-months" id="heatmap-months"></div>
+                    <div class="heatmap-months" id="heatmap-months-sleep"></div>
                     <div class="heatmap-wrapper">
                         <div class="heatmap-days">
                             <span>Mon</span>
                             <span>Wed</span>
                             <span>Fri</span>
                         </div>
-                        <div class="heatmap-grid" id="heatmap-grid"></div>
+                        <div class="heatmap-grid" id="heatmap-grid-sleep"></div>
                     </div>
                     <div class="heatmap-legend">
                         <span>Less</span>
-                        <div class="legend-colors" id="legend-colors">
-                            <div class="legend-square"></div>
-                            <div class="legend-square"></div>
-                            <div class="legend-square"></div>
-                            <div class="legend-square"></div>
-                            <div class="legend-square"></div>
+                        <div class="legend-colors" id="legend-colors-sleep"></div>
+                        <span>More</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Steps Graph -->
+            <section class="health-dashboard">
+                <h2 class="metric-title">Steps</h2>
+                <div class="heatmap-container">
+                    <div class="heatmap-months" id="heatmap-months-steps"></div>
+                    <div class="heatmap-wrapper">
+                        <div class="heatmap-days">
+                            <span>Mon</span>
+                            <span>Wed</span>
+                            <span>Fri</span>
                         </div>
+                        <div class="heatmap-grid" id="heatmap-grid-steps"></div>
+                    </div>
+                    <div class="heatmap-legend">
+                        <span>Less</span>
+                        <div class="legend-colors" id="legend-colors-steps"></div>
+                        <span>More</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Graph -->
+            <section class="health-dashboard">
+                <h2 class="metric-title">Activity</h2>
+                <div class="heatmap-container">
+                    <div class="heatmap-months" id="heatmap-months-activity"></div>
+                    <div class="heatmap-wrapper">
+                        <div class="heatmap-days">
+                            <span>Mon</span>
+                            <span>Wed</span>
+                            <span>Fri</span>
+                        </div>
+                        <div class="heatmap-grid" id="heatmap-grid-activity"></div>
+                    </div>
+                    <div class="heatmap-legend">
+                        <span>Less</span>
+                        <div class="legend-colors" id="legend-colors-activity"></div>
                         <span>More</span>
                     </div>
                 </div>

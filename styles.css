@@ -159,37 +159,11 @@ html {
     box-shadow: var(--shadow);
 }
 
-/* Metric Toggle Buttons */
-.metric-toggles {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-
-.metric-btn {
-    flex: 1;
-    min-width: 100px;
-    padding: 0.75rem 1.5rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    background: white;
-    color: var(--text-color);
-    font-size: 1rem;
+.metric-title {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.metric-btn:hover {
-    background: #f5f5f5;
-    border-color: #ccc;
-}
-
-.metric-btn.active {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
 }
 
 /* Heatmap Container */

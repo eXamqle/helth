@@ -1,17 +1,16 @@
 // Health Activity Heatmap
 class HealthDashboard {
   constructor() {
-    this.currentMetric = 'sleep';
     this.data = {};
     this.tooltip = null;
+    this.metrics = ['sleep', 'steps', 'activity'];
     this.init();
   }
 
   async init() {
     await this.loadData();
     this.createTooltip();
-    this.setupEventListeners();
-    this.renderHeatmap();
+    this.renderAllHeatmaps();
   }
 
   async loadData() {
@@ -60,16 +59,9 @@ class HealthDashboard {
     document.body.appendChild(this.tooltip);
   }
 
-  setupEventListeners() {
-    // Metric toggle buttons
-    const buttons = document.querySelectorAll('.metric-btn');
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.currentMetric = btn.dataset.metric;
-        this.renderHeatmap();
-      });
+  renderAllHeatmaps() {
+    this.metrics.forEach(metric => {
+      this.renderHeatmap(metric);
     });
   }
 
@@ -118,10 +110,12 @@ class HealthDashboard {
     }
   }
 
-  renderHeatmap() {
-    const grid = document.getElementById('heatmap-grid');
-    const monthsContainer = document.getElementById('heatmap-months');
-    const legendColors = document.getElementById('legend-colors');
+  renderHeatmap(metric) {
+    const grid = document.getElementById(`heatmap-grid-${metric}`);
+    const monthsContainer = document.getElementById(`heatmap-months-${metric}`);
+    const legendColors = document.getElementById(`legend-colors-${metric}`);
+
+    if (!grid || !monthsContainer || !legendColors) return;
 
     grid.innerHTML = '';
     monthsContainer.innerHTML = '';
@@ -151,16 +145,17 @@ class HealthDashboard {
     while (currentDate <= endDate) {
       const dateStr = currentDate.toISOString().split('T')[0];
       const dayData = this.data[dateStr];
-      const value = dayData ? dayData[this.currentMetric] : null;
-      const intensity = this.getIntensityLevel(value, this.currentMetric);
+      const value = dayData ? dayData[metric] : null;
+      const intensity = this.getIntensityLevel(value, metric);
 
       const square = document.createElement('div');
-      square.className = `heatmap-square ${this.currentMetric}-${intensity}`;
+      square.className = `heatmap-square ${metric}-${intensity}`;
       square.dataset.date = dateStr;
       square.dataset.value = value !== null ? value : '';
+      square.dataset.metric = metric;
 
       // Hover events
-      square.addEventListener('mouseenter', (e) => this.showTooltip(e, dateStr, value));
+      square.addEventListener('mouseenter', (e) => this.showTooltip(e, dateStr, value, metric));
       square.addEventListener('mouseleave', () => this.hideTooltip());
       square.addEventListener('mousemove', (e) => this.updateTooltipPosition(e));
 
@@ -200,12 +195,12 @@ class HealthDashboard {
     // Update legend colors
     for (let i = 0; i <= 4; i++) {
       const square = document.createElement('div');
-      square.className = `legend-square ${this.currentMetric}-${i}`;
+      square.className = `legend-square ${metric}-${i}`;
       legendColors.appendChild(square);
     }
   }
 
-  showTooltip(event, date, value) {
+  showTooltip(event, date, value, metric) {
     const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
       weekday: 'short',
       year: 'numeric',
@@ -213,8 +208,8 @@ class HealthDashboard {
       day: 'numeric'
     });
 
-    const metricName = this.currentMetric.charAt(0).toUpperCase() + this.currentMetric.slice(1);
-    const formattedValue = this.formatValue(value, this.currentMetric);
+    const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
+    const formattedValue = this.formatValue(value, metric);
 
     this.tooltip.innerHTML = `
       <strong>${formattedDate}</strong><br>
