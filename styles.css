@@ -26,14 +26,14 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-y: hidden;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 /* iOS Safe Area Support */
 .container {
     max-width: 600px;
     margin: 0 auto;
-    padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
+    padding: env(safe-area-inset-top, 15px) env(safe-area-inset-right, 15px) env(safe-area-inset-bottom, 15px) env(safe-area-inset-left, 15px);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -161,14 +161,14 @@ html {
 .health-dashboard {
     background: var(--card-bg);
     border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
     box-shadow: var(--shadow);
 }
 
 .metric-title {
     color: var(--primary-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
     font-size: 1.5rem;
     font-weight: 600;
 }
@@ -176,14 +176,14 @@ html {
 /* Heatmap Container */
 .heatmap-container {
     overflow-x: hidden;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
 }
 
 .heatmap-months {
     display: flex;
-    margin-bottom: 0.5rem;
-    padding-left: 40px;
-    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    padding-left: 38px;
+    font-size: 0.8rem;
     color: #666;
 }
 
@@ -194,21 +194,21 @@ html {
 
 .heatmap-wrapper {
     display: flex;
-    gap: 8px;
+    gap: 6px;
 }
 
 .heatmap-days {
     display: grid;
-    grid-template-rows: repeat(7, 15px);
-    gap: 3px;
-    font-size: 0.7rem;
+    grid-template-rows: repeat(7, 18px);
+    gap: 2px;
+    font-size: 0.75rem;
     color: #666;
-    padding-right: 8px;
+    padding-right: 6px;
     min-width: 32px;
 }
 
 .heatmap-days span {
-    height: 15px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -216,16 +216,16 @@ html {
 
 .heatmap-grid {
     display: grid;
-    grid-template-rows: repeat(7, 15px);
+    grid-template-rows: repeat(7, 18px);
     grid-auto-flow: column;
-    grid-auto-columns: 15px;
-    gap: 3px;
+    grid-auto-columns: 18px;
+    gap: 2px;
     position: relative;
 }
 
 .heatmap-square {
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     border-radius: 2px;
     cursor: pointer;
     transition: all 0.05s ease;
@@ -288,7 +288,7 @@ html {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     font-size: 0.75rem;
     color: #666;
     justify-content: flex-end;
@@ -296,19 +296,19 @@ html {
 
 .legend-colors {
     display: flex;
-    gap: 3px;
+    gap: 2px;
 }
 
 .legend-square {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     border-radius: 2px;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
     .health-dashboard {
-        padding: 1rem;
+        padding: 0.75rem 1rem;
     }
 
     .metric-toggles {
@@ -322,7 +322,11 @@ html {
     }
 
     .heatmap-days {
-        font-size: 0.6rem;
+        font-size: 0.65rem;
         min-width: 28px;
+    }
+
+    .heatmap-months {
+        font-size: 0.7rem;
     }
 }
