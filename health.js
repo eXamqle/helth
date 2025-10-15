@@ -338,6 +338,32 @@ class HealthDashboard {
       monthsContainer.appendChild(span);
     }
 
+    // After rendering, check and fix overflow
+    requestAnimationFrame(() => {
+      const containerRect = monthsContainer.parentElement.getBoundingClientRect();
+      const labels = monthsContainer.querySelectorAll('span');
+
+      labels.forEach((label) => {
+        const labelRect = label.getBoundingClientRect();
+
+        // Check if label overflows the right edge
+        if (labelRect.right > containerRect.right) {
+          // Calculate overflow amount and reposition
+          const overflow = labelRect.right - containerRect.right;
+          const currentLeft = labelRect.left - containerRect.left;
+          const newLeft = Math.max(0, currentLeft - overflow - 5); // 5px padding
+          label.style.transform = `translateX(${newLeft - currentLeft}px)`;
+        }
+
+        // Check if label overflows the left edge
+        if (labelRect.left < containerRect.left) {
+          const overflow = containerRect.left - labelRect.left;
+          const currentLeft = labelRect.left - containerRect.left;
+          label.style.transform = `translateX(${overflow + 5}px)`; // 5px padding
+        }
+      });
+    });
+
     // Update legend colors with tooltips
     const legendRanges = this.getLegendRanges(metric);
     const maxLevel = metric === 'mood' ? 7 : 8;  // All metrics now have 8 levels (7 data + 1 no-data)
@@ -425,9 +451,41 @@ class HealthDashboard {
       const x = event.clientX;
       const y = event.clientY;
 
-      // Position tooltip above and to the right of cursor
-      this.tooltip.style.left = `${x + 15}px`;
-      this.tooltip.style.top = `${y - 15}px`;
+      // Get tooltip dimensions
+      const tooltipRect = this.tooltip.getBoundingClientRect();
+      const tooltipWidth = tooltipRect.width;
+      const tooltipHeight = tooltipRect.height;
+
+      // Get viewport dimensions
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Calculate position with offset
+      let left = x + 15;
+      let top = y - 15;
+
+      // Check right boundary
+      if (left + tooltipWidth > viewportWidth) {
+        left = x - tooltipWidth - 15;
+      }
+
+      // Check left boundary
+      if (left < 0) {
+        left = 10;
+      }
+
+      // Check bottom boundary
+      if (top + tooltipHeight > viewportHeight) {
+        top = y - tooltipHeight - 15;
+      }
+
+      // Check top boundary
+      if (top < 0) {
+        top = y + 15;
+      }
+
+      this.tooltip.style.left = `${left}px`;
+      this.tooltip.style.top = `${top}px`;
     }
   }
 

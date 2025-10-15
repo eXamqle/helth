@@ -26,7 +26,9 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-y: auto;
-    margin: 10px 10px 0 10px;
+    margin: 10px;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* iOS Safe Area Support */
@@ -34,7 +36,6 @@ body {
     max-width: 100%;
     margin: 0 auto;
     padding: env(safe-area-inset-top, 10px) env(safe-area-inset-right, 10px) env(safe-area-inset-bottom, 10px) env(safe-area-inset-left, 10px);
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -262,11 +263,15 @@ html {
     padding-left: 38px;
     font-size: 0.8rem;
     color: #b6b6bb;
+    position: relative;
 }
 
 .heatmap-months span {
     min-width: 18px;
     text-align: left;
+    overflow: visible;
+    white-space: nowrap;
+    position: relative;
 }
 
 .heatmap-wrapper {
