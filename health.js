@@ -17,6 +17,7 @@ class HealthDashboard {
     this.renderPieChart('steps');
     this.renderPieChart('activity');
     this.renderPieChart('mood');
+    this.initWidgetStack();
   }
 
   async loadData() {
@@ -621,6 +622,122 @@ class HealthDashboard {
             }
           }
         }
+      }
+    });
+  }
+
+  initWidgetStack() {
+    const slides = document.querySelectorAll('.widget-slide');
+    const indicatorsContainer = document.getElementById('widget-indicators');
+    const prevBtn = document.getElementById('prev-widget');
+    const nextBtn = document.getElementById('next-widget');
+    const titleElement = document.getElementById('widget-title');
+
+    if (!slides.length || !indicatorsContainer) return;
+
+    let currentIndex = 0;
+    const metricNames = {
+      sleep: 'Sleep',
+      steps: 'Steps',
+      activity: 'Activity',
+      mood: 'Mood'
+    };
+
+    // Create indicators
+    slides.forEach((slide, index) => {
+      const indicator = document.createElement('div');
+      indicator.className = 'widget-indicator';
+      if (index === 0) indicator.classList.add('active');
+
+      const metric = slide.dataset.metric;
+      indicator.title = `${metricNames[metric]} Distribution`;
+
+      indicator.addEventListener('click', () => {
+        goToSlide(index);
+      });
+
+      indicatorsContainer.appendChild(indicator);
+    });
+
+    const indicators = indicatorsContainer.querySelectorAll('.widget-indicator');
+
+    function goToSlide(index) {
+      // Remove active class from current slide and indicator
+      slides[currentIndex].classList.remove('active');
+      indicators[currentIndex].classList.remove('active');
+
+      // Add active class to new slide and indicator
+      currentIndex = index;
+      slides[currentIndex].classList.add('active');
+      indicators[currentIndex].classList.add('active');
+
+      // Update title
+      if (titleElement) {
+        const metric = slides[currentIndex].dataset.metric;
+        titleElement.textContent = `${metricNames[metric]} Distribution`;
+      }
+    }
+
+    function nextSlide() {
+      const nextIndex = (currentIndex + 1) % slides.length;
+      goToSlide(nextIndex);
+    }
+
+    function prevSlide() {
+      const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+      goToSlide(prevIndex);
+    }
+
+    // Navigation buttons
+    if (nextBtn) {
+      nextBtn.addEventListener('click', nextSlide);
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', prevSlide);
+    }
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const container = document.querySelector('.widget-container');
+
+    if (container) {
+      container.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+
+      function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            // Swipe left - next slide
+            nextSlide();
+          } else {
+            // Swipe right - previous slide
+            prevSlide();
+          }
+        }
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      // Only handle arrow keys when the widget stack section is visible
+      const widgetStack = document.querySelector('.widget-stack');
+      if (!widgetStack) return;
+
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        nextSlide();
       }
     });
   }

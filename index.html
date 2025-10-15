@@ -118,36 +118,30 @@
                 <canvas id="line-chart"></canvas>
             </section>
 
-            <!-- Sleep Distribution -->
-            <section class="health-dashboard chart-section">
+            <!-- Distribution Widget Stack -->
+            <section class="health-dashboard chart-section widget-stack">
                 <div class="metric-header">
-                    <h2 class="metric-title">Sleep Distribution</h2>
+                    <h2 class="metric-title" id="widget-title">Sleep Distribution</h2>
+                    <div class="widget-controls">
+                        <button class="widget-nav" id="prev-widget" aria-label="Previous">‹</button>
+                        <div class="widget-indicators" id="widget-indicators"></div>
+                        <button class="widget-nav" id="next-widget" aria-label="Next">›</button>
+                    </div>
                 </div>
-                <canvas id="pie-chart-sleep"></canvas>
-            </section>
-
-            <!-- Steps Distribution -->
-            <section class="health-dashboard chart-section">
-                <div class="metric-header">
-                    <h2 class="metric-title">Steps Distribution</h2>
+                <div class="widget-container">
+                    <div class="widget-slide active" data-metric="sleep">
+                        <canvas id="pie-chart-sleep"></canvas>
+                    </div>
+                    <div class="widget-slide" data-metric="steps">
+                        <canvas id="pie-chart-steps"></canvas>
+                    </div>
+                    <div class="widget-slide" data-metric="activity">
+                        <canvas id="pie-chart-activity"></canvas>
+                    </div>
+                    <div class="widget-slide" data-metric="mood">
+                        <canvas id="pie-chart-mood"></canvas>
+                    </div>
                 </div>
-                <canvas id="pie-chart-steps"></canvas>
-            </section>
-
-            <!-- Activity Distribution -->
-            <section class="health-dashboard chart-section">
-                <div class="metric-header">
-                    <h2 class="metric-title">Activity Distribution</h2>
-                </div>
-                <canvas id="pie-chart-activity"></canvas>
-            </section>
-
-            <!-- Mood Distribution -->
-            <section class="health-dashboard chart-section">
-                <div class="metric-header">
-                    <h2 class="metric-title">Mood Distribution</h2>
-                </div>
-                <canvas id="pie-chart-mood"></canvas>
             </section>
 
             <!-- <div class="status">
