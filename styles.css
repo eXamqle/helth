@@ -25,7 +25,6 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-y: auto;
     margin: 10px;
     height: 100vh;
     overflow: hidden;
@@ -189,7 +188,7 @@ footer {
 /* Smooth Scrolling */
 html {
     scroll-behavior: smooth;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 /* Health Dashboard Styles */
@@ -248,7 +247,7 @@ html {
 
 /* Heatmap Container */
 .heatmap-container {
-    overflow-x: auto;
+    overflow-x: hidden;
     padding-bottom: 0.5rem;
     flex: 1;
     min-width: 0;
@@ -447,7 +446,7 @@ html {
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    padding: 0;
+    padding: 0 0 2px 0;
 }
 
 .widget-nav:hover {

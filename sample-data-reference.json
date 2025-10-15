@@ -1,0 +1,435 @@
+{
+  "data" : {
+    "stateOfMind" : [
+      {
+        "start" : "2025-10-08T18:29:08Z",
+        "kind" : "daily_mood",
+        "id" : "BE845D4D-6B08-4476-84D8-5CD2BE7B7359",
+        "associations" : [
+          "health"
+        ],
+        "valence" : -0.23417721518987344,
+        "valenceClassification" : "slightly_unpleasant",
+        "labels" : [
+          "drained",
+          "irritated",
+          "scared",
+          "worried"
+        ],
+        "end" : "2025-10-08T18:29:08Z"
+      },
+      {
+        "start" : "2025-10-06T11:21:20Z",
+        "associations" : [
+          "health"
+        ],
+        "labels" : [
+          "drained",
+          "overwhelmed",
+          "stressed",
+          "worried"
+        ],
+        "kind" : "momentary_emotion",
+        "valence" : -0.48523206751054859,
+        "id" : "A7019532-6157-489C-9D55-B2F83130E1E7",
+        "end" : "2025-10-06T11:21:20Z",
+        "valenceClassification" : "unpleasant"
+      }
+    ],
+    "metrics" : [
+      {
+        "data" : [
+          {
+            "source" : "Luka’s Apple Watch",
+            "date" : "2025-10-01 00:00:00 +0200",
+            "qty" : 23
+          },
+          {
+            "source" : "Luka’s Apple Watch",
+            "qty" : 14,
+            "date" : "2025-10-02 00:00:00 +0200"
+          },
+          {
+            "date" : "2025-10-03 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch",
+            "qty" : 6
+          },
+          {
+            "qty" : 44,
+            "date" : "2025-10-04 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "date" : "2025-10-05 00:00:00 +0200",
+            "qty" : 18,
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "date" : "2025-10-06 00:00:00 +0200",
+            "qty" : 35,
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "qty" : 13,
+            "source" : "Luka’s Apple Watch",
+            "date" : "2025-10-07 00:00:00 +0200"
+          },
+          {
+            "source" : "Luka’s Apple Watch",
+            "qty" : 62,
+            "date" : "2025-10-08 00:00:00 +0200"
+          },
+          {
+            "date" : "2025-10-09 00:00:00 +0200",
+            "qty" : 26,
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "source" : "Luka’s Apple Watch",
+            "qty" : 27,
+            "date" : "2025-10-10 00:00:00 +0200"
+          },
+          {
+            "qty" : 22,
+            "source" : "Luka’s Apple Watch",
+            "date" : "2025-10-11 00:00:00 +0200"
+          },
+          {
+            "source" : "Luka’s Apple Watch",
+            "date" : "2025-10-12 00:00:00 +0200",
+            "qty" : 94
+          },
+          {
+            "qty" : 13,
+            "date" : "2025-10-13 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "date" : "2025-10-14 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch",
+            "qty" : 42
+          },
+          {
+            "qty" : 7,
+            "date" : "2025-10-15 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch"
+          }
+        ],
+        "name" : "apple_exercise_time",
+        "units" : "min"
+      },
+      {
+        "name" : "step_count",
+        "data" : [
+          {
+            "date" : "2025-10-01 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch|Luka’s iPhone",
+            "qty" : 4171.7425983571757
+          },
+          {
+            "qty" : 10282.257401642824,
+            "date" : "2025-10-02 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          },
+          {
+            "qty" : 3686,
+            "date" : "2025-10-03 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          },
+          {
+            "date" : "2025-10-04 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch|Luka’s iPhone",
+            "qty" : 4278
+          },
+          {
+            "date" : "2025-10-05 00:00:00 +0200",
+            "qty" : 3414,
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          },
+          {
+            "qty" : 6743,
+            "date" : "2025-10-06 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          },
+          {
+            "qty" : 3770,
+            "date" : "2025-10-07 00:00:00 +0200",
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          },
+          {
+            "source" : "Luka’s Apple Watch|Luka’s iPhone",
+            "date" : "2025-10-08 00:00:00 +0200",
+            "qty" : 10735.779248968835
+          },
+          {
+            "source" : "Luka’s Apple Watch|Luka’s iPhone",
+            "date" : "2025-10-09 00:00:00 +0200",
+            "qty" : 10581
+          },
+          {
+            "qty" : 13018,
+            "source" : "Luka’s Apple Watch|Luka’s iPhone",
+            "date" : "2025-10-10 00:00:00 +0200"
+          },
+          {
+            "source" : "Luka’s Apple Watch|Luka’s iPhone",
+            "date" : "2025-10-11 00:00:00 +0200",
+            "qty" : 5972.7912622174244
+          },
+          {
+            "date" : "2025-10-12 00:00:00 +0200",
+            "qty" : 11200,
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          },
+          {
+            "source" : "Luka’s Apple Watch|Luka’s iPhone",
+            "qty" : 7287,
+            "date" : "2025-10-13 00:00:00 +0200"
+          },
+          {
+            "date" : "2025-10-14 00:00:00 +0200",
+            "qty" : 9261,
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          },
+          {
+            "date" : "2025-10-15 00:00:00 +0200",
+            "qty" : 2261,
+            "source" : "Luka’s Apple Watch|Luka’s iPhone"
+          }
+        ],
+        "units" : "count"
+      },
+      {
+        "units" : "hr",
+        "data" : [
+          {
+            "rem" : 2.0465480083889434,
+            "inBedEnd" : "2025-10-01 06:47:15 +0200",
+            "deep" : 0.73504574669731981,
+            "date" : "2025-10-01 00:00:00 +0200",
+            "sleepEnd" : "2025-10-01 06:47:15 +0200",
+            "inBed" : 0,
+            "inBedStart" : "2025-09-30 22:47:07 +0200",
+            "asleep" : 0,
+            "awake" : 0.22556090460883246,
+            "totalSleep" : 7.7767549133300777,
+            "sleepStart" : "2025-09-30 22:47:07 +0200",
+            "core" : 4.9951611582438149,
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "date" : "2025-10-02 00:00:00 +0200",
+            "sleepEnd" : "2025-10-02 07:17:15 +0200",
+            "rem" : 1.6456825383504232,
+            "inBedStart" : "2025-10-02 00:25:15 +0200",
+            "totalSleep" : 6.5910595660739482,
+            "inBedEnd" : "2025-10-02 07:17:15 +0200",
+            "inBed" : 0,
+            "core" : 4.3523007498847113,
+            "awake" : 0.27569492340087892,
+            "sleepStart" : "2025-10-02 00:25:15 +0200",
+            "asleep" : 0,
+            "deep" : 0.59307627783881289,
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "date" : "2025-10-03 00:00:00 +0200",
+            "rem" : 0.81013139936659084,
+            "inBed" : 0,
+            "totalSleep" : 5.2452104441324874,
+            "awake" : 1.0024802652994793,
+            "core" : 3.9256049304538307,
+            "sleepStart" : "2025-10-03 00:07:35 +0200",
+            "sleepEnd" : "2025-10-03 17:55:28 +0200",
+            "deep" : 0.37580868191189237,
+            "asleep" : 0.13366543240017362,
+            "inBedStart" : "2025-10-03 00:07:35 +0200",
+            "source" : "Luka’s Apple Watch",
+            "inBedEnd" : "2025-10-03 17:55:28 +0200"
+          },
+          {
+            "core" : 3.1323654937744139,
+            "inBedStart" : "2025-10-03 17:55:28 +0200",
+            "asleep" : 1.7365484195285372,
+            "inBed" : 0,
+            "deep" : 0.96075854831271701,
+            "awake" : 0.53455976698133678,
+            "inBedEnd" : "2025-10-04 08:43:43 +0200",
+            "sleepEnd" : "2025-10-04 08:43:43 +0200",
+            "rem" : 1.7710634697808161,
+            "sleepStart" : "2025-10-03 17:55:28 +0200",
+            "date" : "2025-10-04 00:00:00 +0200",
+            "totalSleep" : 7.6007359313964837,
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "core" : 4.0926092359754778,
+            "deep" : 0.60142136467827689,
+            "sleepStart" : "2025-10-04 23:21:33 +0200",
+            "source" : "Luka’s Apple Watch",
+            "sleepEnd" : "2025-10-05 09:48:20 +0200",
+            "inBed" : 0,
+            "rem" : 1.8124087482028537,
+            "asleep" : 1.7209898037380642,
+            "inBedStart" : "2025-10-04 23:21:33 +0200",
+            "inBedEnd" : "2025-10-05 09:48:20 +0200",
+            "totalSleep" : 8.2274291525946719,
+            "date" : "2025-10-05 00:00:00 +0200",
+            "awake" : 0.25898062388102211
+          },
+          {
+            "core" : 5.1964247767130542,
+            "inBed" : 0,
+            "sleepEnd" : "2025-10-06 08:23:00 +0200",
+            "inBedEnd" : "2025-10-06 08:23:00 +0200",
+            "rem" : 2.188849932352702,
+            "inBedStart" : "2025-10-05 22:45:02 +0200",
+            "awake" : 1.378580084906684,
+            "totalSleep" : 8.2541577487521707,
+            "sleepStart" : "2025-10-05 22:45:02 +0200",
+            "date" : "2025-10-06 00:00:00 +0200",
+            "asleep" : 0,
+            "deep" : 0.86888303968641489,
+            "source" : "Luka’s Apple Watch"
+          },
+          {
+            "core" : 3.3812707858615449,
+            "inBed" : 0,
+            "totalSleep" : 4.8422876781887476,
+            "inBedEnd" : "2025-10-07 02:55:02 +0200",
+            "asleep" : 0,
+            "rem" : 0.87656774308946406,
+            "source" : "Luka’s Apple Watch",
+            "sleepEnd" : "2025-10-07 02:55:02 +0200",
+            "date" : "2025-10-07 00:00:00 +0200",
+            "inBedStart" : "2025-10-06 21:59:29 +0200",
+            "sleepStart" : "2025-10-06 21:59:29 +0200",
+            "deep" : 0.58444914923773872,
+            "awake" : 0.083517765469021274
+          },
+          {
+            "inBedEnd" : "2025-10-08 06:49:12 +0200",
+            "awake" : 0.15867288377549915,
+            "deep" : 0.76003211551242411,
+            "totalSleep" : 8.0488591766357409,
+            "sleepStart" : "2025-10-07 22:36:45 +0200",
+            "source" : "Luka’s Apple Watch",
+            "asleep" : 0,
+            "date" : "2025-10-08 00:00:00 +0200",
+            "inBedStart" : "2025-10-07 22:36:45 +0200",
+            "sleepEnd" : "2025-10-08 06:49:12 +0200",
+            "inBed" : 0,
+            "rem" : 2.4797055138481987,
+            "core" : 4.8091215472751179
+          },
+          {
+            "core" : 5.384961950514052,
+            "source" : "Luka’s Apple Watch",
+            "asleep" : 0,
+            "totalSleep" : 7.6726708984375005,
+            "sleepEnd" : "2025-10-09 05:42:32 +0200",
+            "inBed" : 0,
+            "inBedStart" : "2025-10-08 21:50:09 +0200",
+            "awake" : 0.2004394107394748,
+            "inBedEnd" : "2025-10-09 05:42:32 +0200",
+            "rem" : 1.8283383136325413,
+            "date" : "2025-10-09 00:00:00 +0200",
+            "deep" : 0.45937063429090708,
+            "sleepStart" : "2025-10-08 21:50:09 +0200"
+          },
+          {
+            "sleepStart" : "2025-10-09 21:18:48 +0200",
+            "inBedStart" : "2025-10-09 21:18:48 +0200",
+            "sleepEnd" : "2025-10-10 05:59:04 +0200",
+            "deep" : 0.88552560594346785,
+            "totalSleep" : 8.6041756863064229,
+            "asleep" : 0,
+            "inBedEnd" : "2025-10-10 05:59:04 +0200",
+            "inBed" : 0,
+            "date" : "2025-10-10 00:00:00 +0200",
+            "rem" : 2.5141510476006399,
+            "source" : "Luka’s Apple Watch",
+            "awake" : 0.066831821865505639,
+            "core" : 5.2044990327623157
+          },
+          {
+            "inBedStart" : "2025-10-10 21:26:50 +0200",
+            "core" : 4.7930275895860461,
+            "deep" : 0.86834733327229818,
+            "sleepStart" : "2025-10-10 21:26:50 +0200",
+            "sleepEnd" : "2025-10-11 05:46:50 +0200",
+            "inBedEnd" : "2025-10-11 05:46:50 +0200",
+            "source" : "Luka’s Apple Watch",
+            "rem" : 2.2626967281765404,
+            "inBed" : 0,
+            "asleep" : 0,
+            "totalSleep" : 7.9240716510348852,
+            "awake" : 0.40923938751220701,
+            "date" : "2025-10-11 00:00:00 +0200"
+          },
+          {
+            "sleepEnd" : "2025-10-12 05:22:47 +0200",
+            "date" : "2025-10-12 00:00:00 +0200",
+            "inBedEnd" : "2025-10-12 05:22:47 +0200",
+            "awake" : 0.19216161515977645,
+            "deep" : 0.77697015126546232,
+            "core" : 4.6029561233520511,
+            "totalSleep" : 7.3681237792968766,
+            "inBed" : 0,
+            "inBedStart" : "2025-10-11 21:49:10 +0200",
+            "asleep" : 0,
+            "rem" : 1.9881975046793623,
+            "source" : "Luka’s Apple Watch",
+            "sleepStart" : "2025-10-11 21:49:10 +0200"
+          },
+          {
+            "inBed" : 0,
+            "sleepStart" : "2025-10-12 22:08:12 +0200",
+            "rem" : 1.9286679289076063,
+            "awake" : 0.22555698818630643,
+            "inBedStart" : "2025-10-12 22:08:12 +0200",
+            "sleepEnd" : "2025-10-13 05:37:36 +0200",
+            "deep" : 1.0270521969265407,
+            "inBedEnd" : "2025-10-13 05:37:36 +0200",
+            "source" : "Luka’s Apple Watch",
+            "date" : "2025-10-13 00:00:00 +0200",
+            "totalSleep" : 7.264479026794433,
+            "asleep" : 0,
+            "core" : 4.308758900960286
+          },
+          {
+            "source" : "Luka’s Apple Watch",
+            "inBedEnd" : "2025-10-14 06:06:28 +0200",
+            "rem" : 1.6032160186767579,
+            "sleepEnd" : "2025-10-14 06:06:28 +0200",
+            "awake" : 0.79323968251546229,
+            "date" : "2025-10-14 00:00:00 +0200",
+            "sleepStart" : "2025-10-13 22:27:31 +0200",
+            "totalSleep" : 6.8558152050442169,
+            "asleep" : 0,
+            "deep" : 1.0272159830729166,
+            "core" : 4.2253832032945429,
+            "inBedStart" : "2025-10-13 22:27:31 +0200",
+            "inBed" : 0
+          },
+          {
+            "inBedStart" : "2025-10-14 21:43:25 +0200",
+            "inBedEnd" : "2025-10-15 06:05:57 +0200",
+            "date" : "2025-10-15 00:00:00 +0200",
+            "core" : 4.4510169601440426,
+            "deep" : 1.0356338670518663,
+            "inBed" : 0,
+            "sleepStart" : "2025-10-14 21:43:25 +0200",
+            "totalSleep" : 8.2587962468465168,
+            "awake" : 0.11692888471815321,
+            "source" : "Luka’s Apple Watch",
+            "asleep" : 0,
+            "rem" : 2.7721454196506077,
+            "sleepEnd" : "2025-10-15 06:05:57 +0200"
+          }
+        ],
+        "name" : "sleep_analysis"
+      }
+    ]
+  }
+}

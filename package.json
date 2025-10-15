@@ -1,0 +1,15 @@
+{
+  "name": "health-data-importer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Import health data to Supabase",
+  "main": "import-to-supabase.js",
+  "scripts": {
+    "import": "node import-to-supabase.js",
+    "verify": "node verify-import.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.75.0",
+    "dotenv": "^16.3.1"
+  }
+}

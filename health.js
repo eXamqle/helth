@@ -1,10 +1,13 @@
 // @ts-nocheck
 // Health Activity Heatmap
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
 class HealthDashboard {
   constructor() {
     this.data = {};
     this.tooltip = null;
     this.metrics = ['sleep', 'steps', 'activity', 'mood'];
+    this.supabase = null;
     this.init();
   }
 
@@ -20,20 +23,224 @@ class HealthDashboard {
     this.initWidgetStack();
   }
 
+  async fetchAllMetrics() {
+    // Fetch all metrics by paginating through results
+    let allMetrics = [];
+    let from = 0;
+    const limit = 1000;
+    let hasMore = true;
+
+    while (hasMore) {
+      const { data, error } = await this.supabase
+        .from('metrics')
+        .select('*')
+        .range(from, from + limit - 1);
+
+      if (error) {
+        return { data: null, error };
+      }
+
+      if (data && data.length > 0) {
+        allMetrics = allMetrics.concat(data);
+        from += limit;
+        hasMore = data.length === limit;
+      } else {
+        hasMore = false;
+      }
+    }
+
+    return { data: allMetrics, error: null };
+  }
+
   async loadData() {
     try {
-      // Try to load from sample-data.json first
-      const response = await fetch('sample-data.json');
-      if (response.ok) {
-        this.data = await response.json();
-      } else {
-        // Fallback to generating mock data
+      // Initialize Supabase client
+      const SUPABASE_URL = 'https://zlugshfwlwfsugzedezg.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsdWdzaGZ3bHdmc3VnemVkZXpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MDY1ODksImV4cCI6MjA3NjA4MjU4OX0.GYfsmO4WVo1BArlwJIAGj2oTdTQSS-VbOITTSM522OE';
+
+      this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      // Fetch data from Supabase
+      // Note: Supabase has a default limit of 1000 records, so we need to paginate or fetch separately
+      const [metricsResult, sleepResult, stateOfMindResult] = await Promise.all([
+        this.fetchAllMetrics(),
+        this.supabase.from('sleep_analysis').select('*'),
+        this.supabase.from('state_of_mind').select('*')
+      ]);
+
+      if (metricsResult.error) throw metricsResult.error;
+      if (sleepResult.error) throw sleepResult.error;
+      if (stateOfMindResult.error) throw stateOfMindResult.error;
+
+      // Transform Supabase data to the format expected by the dashboard
+      this.data = this.transformSupabaseData(
+        metricsResult.data || [],
+        sleepResult.data || [],
+        stateOfMindResult.data || []
+      );
+
+      console.log('Data loaded from Supabase successfully');
+    } catch (error) {
+      console.error('Error loading data from Supabase:', error);
+      console.log('Falling back to sample-data.json');
+
+      try {
+        // Fallback to sample-data.json
+        const response = await fetch('sample-data.json');
+        if (response.ok) {
+          const rawData = await response.json();
+          if (rawData.data && rawData.data.metrics) {
+            this.data = this.transformGoogleDriveData(rawData);
+          } else {
+            this.data = rawData;
+          }
+        } else {
+          this.data = this.generateMockData();
+        }
+      } catch (fallbackError) {
+        console.log('Using mock data');
         this.data = this.generateMockData();
       }
-    } catch (error) {
-      console.log('Using mock data');
-      this.data = this.generateMockData();
     }
+  }
+
+  transformSupabaseData(metrics, sleepAnalysis, stateOfMind) {
+    const transformed = {};
+
+    console.log('Transforming Supabase data...');
+    console.log('Metrics count:', metrics.length);
+    console.log('Sleep analysis count:', sleepAnalysis.length);
+    console.log('State of mind count:', stateOfMind.length);
+
+    // Sample metrics to debug
+    const sampleMetrics = metrics.slice(0, 10);
+    console.log('Sample metrics:', sampleMetrics.map(m => ({ date: m.date, name: m.metric_name, qty: m.quantity })));
+
+    // Process metrics (steps, exercise)
+    let stepCount = 0;
+    let activityCount = 0;
+
+    metrics.forEach(metric => {
+      const date = this.parseDate(metric.date);
+      if (!transformed[date]) transformed[date] = {};
+
+      if (metric.metric_name === 'step_count') {
+        transformed[date].steps = Math.round(metric.quantity);
+        stepCount++;
+        if (stepCount <= 5) {
+          console.log(`Added steps for ${date}: ${transformed[date].steps} (from ${metric.date})`);
+        }
+      } else if (metric.metric_name === 'apple_exercise_time') {
+        transformed[date].activity = Math.round(metric.quantity);
+        activityCount++;
+        if (activityCount <= 5) {
+          console.log(`Added activity for ${date}: ${transformed[date].activity}`);
+        }
+      }
+    });
+
+    console.log(`Total steps entries added: ${stepCount}`);
+    console.log(`Total activity entries added: ${activityCount}`);
+
+    // Process sleep analysis
+    sleepAnalysis.forEach(entry => {
+      const date = this.parseDate(entry.date);
+      if (!transformed[date]) transformed[date] = {};
+
+      // Convert total_sleep (hours) to a score (0-100)
+      // Assume 8 hours = 100, scale proportionally
+      const sleepScore = Math.min(100, Math.round((entry.total_sleep / 8) * 100));
+      transformed[date].sleep = sleepScore;
+    });
+
+    // Process state of mind
+    stateOfMind.forEach(entry => {
+      const date = this.parseDate(entry.start_time);
+      if (!transformed[date]) transformed[date] = {};
+
+      // Convert valence (-1 to 1) to mood scale (1-7)
+      // -1 = 1 (Very Unpleasant), 0 = 4 (Neutral), 1 = 7 (Very Pleasant)
+      const moodScore = Math.round(((entry.valence + 1) / 2) * 6) + 1;
+      transformed[date].mood = Math.max(1, Math.min(7, moodScore));
+    });
+
+    // Find dates with steps data to debug
+    const datesWithSteps = Object.keys(transformed).filter(date => transformed[date].steps);
+    console.log('Dates with steps:', datesWithSteps.length);
+    console.log('First 5 dates with steps:', datesWithSteps.slice(0, 5));
+    console.log('Last 5 dates with steps:', datesWithSteps.slice(-5));
+
+    console.log('Transformed data sample:', Object.keys(transformed).slice(0, 5).map(k => ({ date: k, data: transformed[k] })));
+    console.log('Total dates with data:', Object.keys(transformed).length);
+
+    return transformed;
+  }
+
+  transformGoogleDriveData(rawData) {
+    const transformed = {};
+
+    // Extract metrics data
+    if (rawData.data && rawData.data.metrics) {
+      rawData.data.metrics.forEach(metric => {
+        if (metric.name === 'sleep_analysis') {
+          // Process sleep data
+          metric.data.forEach(entry => {
+            const date = this.parseDate(entry.date);
+            if (!transformed[date]) transformed[date] = {};
+            // Convert totalSleep hours to a score (0-100)
+            // Assume 8 hours = 100, scale proportionally
+            const sleepScore = Math.min(100, Math.round((entry.totalSleep / 8) * 100));
+            transformed[date].sleep = sleepScore;
+          });
+        } else if (metric.name === 'step_count') {
+          // Process step data
+          metric.data.forEach(entry => {
+            const date = this.parseDate(entry.date);
+            if (!transformed[date]) transformed[date] = {};
+            transformed[date].steps = Math.round(entry.qty);
+          });
+        } else if (metric.name === 'apple_exercise_time') {
+          // Process activity data
+          metric.data.forEach(entry => {
+            const date = this.parseDate(entry.date);
+            if (!transformed[date]) transformed[date] = {};
+            transformed[date].activity = entry.qty;
+          });
+        }
+      });
+    }
+
+    // Extract state of mind data
+    if (rawData.data && rawData.data.stateOfMind) {
+      rawData.data.stateOfMind.forEach(entry => {
+        const date = this.parseDate(entry.start);
+        if (!transformed[date]) transformed[date] = {};
+
+        // Convert valence (-1 to 1) to mood scale (1-7)
+        // -1 = 1 (Very Unpleasant), 0 = 4 (Neutral), 1 = 7 (Very Pleasant)
+        const moodScore = Math.round(((entry.valence + 1) / 2) * 6) + 1;
+        transformed[date].mood = Math.max(1, Math.min(7, moodScore));
+      });
+    }
+
+    return transformed;
+  }
+
+  parseDate(dateString) {
+    // Handle various date formats from the data
+    // "2025-10-01 00:00:00 +0200" or "2025-10-08T18:29:08Z" or "2025-10-14T22:00:00+00:00"
+    // Extract just the date part to avoid timezone conversion issues
+
+    if (!dateString) return null;
+
+    const dateMatch = dateString.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (dateMatch) {
+      return dateMatch[1];
+    }
+
+    // Fallback to original logic for other formats
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
   }
 
   generateMockData() {
@@ -214,21 +421,20 @@ class HealthDashboard {
     // Calculate date range (6 months back from today)
     const endDate = new Date();
     endDate.setHours(0, 0, 0, 0);
-    endDate.setDate(endDate.getDate() + 1);
 
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - 6);
     startDate.setHours(0, 0, 0, 0);
 
-    // Work backwards from today: find the Monday of the week containing today
+    // Work backwards from today: find the Sunday of the week containing today
     const todayDay = endDate.getDay();
-    const daysFromMonday = todayDay === 0 ? 6 : todayDay - 1;
+    const daysFromSunday = todayDay; // Sunday = 0, so no adjustment needed
 
-    const thisWeekMonday = new Date(endDate);
-    thisWeekMonday.setDate(thisWeekMonday.getDate() - daysFromMonday);
+    const thisWeekSunday = new Date(endDate);
+    thisWeekSunday.setDate(thisWeekSunday.getDate() - daysFromSunday);
 
     // Go back 25 more weeks (26 weeks total)
-    const paddedStartDate = new Date(thisWeekMonday);
+    const paddedStartDate = new Date(thisWeekSunday);
     paddedStartDate.setDate(paddedStartDate.getDate() - (25 * 7));
 
     const paddedEndDate = new Date(endDate);
@@ -239,7 +445,7 @@ class HealthDashboard {
     let columnIndex = 0;
     let daysInGrid = new Set();
 
-    // Generate squares organized by weeks (Mon-Sun)
+    // Generate squares organized by weeks (Sun-Sat)
     const squares = [];
     let currentDate = new Date(paddedStartDate);
 
@@ -248,12 +454,16 @@ class HealthDashboard {
     let daysWithData = 0;
 
     while (currentDate <= paddedEndDate) {
-      const dateStr = currentDate.toISOString().split('T')[0];
+      // Use local date string to avoid timezone issues
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const dateStr = `${year}-${month}-${day}`;
       const dayData = this.data[dateStr];
       const dayOfWeek = currentDate.getDay();
 
-      // Increment week count at the start of each week (Monday = day 1)
-      if (dayOfWeek === 1 && totalDays > 0) {
+      // Increment week count at the start of each week (Sunday = day 0)
+      if (dayOfWeek === 0 && totalDays > 0) {
         weekCount++;
       }
 
@@ -288,9 +498,7 @@ class HealthDashboard {
       const dateOfMonth = currentDate.getDate();
       if (dateOfMonth === 1) {
         const month = currentDate.getMonth();
-        // If 1st falls on Sunday (day 0), it appears at top of column but needs next column's label
-        const adjustedColumn = dayOfWeek === 0 ? weekCount + 1 : weekCount;
-        monthLabels.push({ month, columnIndex: adjustedColumn });
+        monthLabels.push({ month, columnIndex: weekCount });
       }
 
       squares.push(square);
@@ -301,12 +509,12 @@ class HealthDashboard {
     // Add squares to grid
     squares.forEach(square => grid.appendChild(square));
 
-    // Render day labels: Mon at row 2, Wed at row 4, Fri at row 6
+    // Render day labels: Sun at row 0, Mon at row 1, Tue at row 2, etc.
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    // Monday-first order (1=Mon, 2=Tue, ..., 6=Sat, 0=Sun)
-    const dayOrder = [1, 2, 3, 4, 5, 6, 0]; // Mon through Sun
+    // Sunday-first order (0=Sun, 1=Mon, ..., 6=Sat)
+    const dayOrder = [0, 1, 2, 3, 4, 5, 6]; // Sun through Sat
 
-    // Row indices: 0=empty, 1=Mon, 2=empty, 3=Wed, 4=empty, 5=Fri, 6=empty
+    // Show labels for Mon, Wed, Fri (rows 1, 3, 5)
     let rowIndex = 0;
     dayOrder.forEach(dayIndex => {
       if (daysInGrid.has(dayIndex)) {
@@ -631,7 +839,7 @@ class HealthDashboard {
     levelCounts.forEach((count, level) => {
       if (count > 0) {
         const percentage = ((count / totalDays) * 100).toFixed(1);
-        labels.push(`${ranges[level]}: ${percentage}%`);
+        labels.push(`${ranges[level]}: ${count} days (${percentage}%)`);
         data.push(count);
       }
     });
@@ -674,8 +882,9 @@ class HealthDashboard {
             callbacks: {
               label: function(context) {
                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                const percentage = ((context.parsed / total) * 100).toFixed(1);
-                return `${context.label.split(':')[0]}: ${percentage}%`;
+                const count = context.parsed;
+                const percentage = ((count / total) * 100).toFixed(1);
+                return `${context.label.split(':')[0]}: ${count} days (${percentage}%)`;
               }
             }
           }
