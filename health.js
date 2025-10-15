@@ -213,7 +213,7 @@ class HealthDashboard {
     // Calculate date range (6 months back from today)
     const endDate = new Date();
     endDate.setHours(0, 0, 0, 0);
-    endDate.setDate(endDate.getDate() + 1); // Add 1 day to include today
+    endDate.setDate(endDate.getDate() + 1);
 
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - 6);
@@ -233,9 +233,9 @@ class HealthDashboard {
     const paddedEndDate = new Date(endDate);
 
     // Track months for labels and days
-    let currentMonth = -1;
     let monthLabels = [];
     let weekCount = 0;
+    let columnIndex = 0;
     let daysInGrid = new Set();
 
     // Generate squares organized by weeks (Mon-Sun)
@@ -250,6 +250,11 @@ class HealthDashboard {
       const dateStr = currentDate.toISOString().split('T')[0];
       const dayData = this.data[dateStr];
       const dayOfWeek = currentDate.getDay();
+
+      // Increment week count at the start of each week (Monday = day 1)
+      if (dayOfWeek === 1 && totalDays > 0) {
+        weekCount++;
+      }
 
       totalDays++;
       // Track which days of the week are present in the grid
@@ -278,19 +283,16 @@ class HealthDashboard {
       square.addEventListener('mouseleave', () => this.hideTooltip());
       square.addEventListener('mousemove', (e) => this.updateTooltipPosition(e));
 
-      // Track month changes for labels - check if this is the first day of the week (Monday)
-      const month = currentDate.getMonth();
-      if (month !== currentMonth && dayOfWeek === 1) {
-        currentMonth = month;
-        monthLabels.push({ month, weekIndex: weekCount });
+      // Track month changes for labels - place label at the 1st day of each month
+      const dateOfMonth = currentDate.getDate();
+      if (dateOfMonth === 1) {
+        const month = currentDate.getMonth();
+        // If 1st falls on Sunday (day 0), it appears at top of column but needs next column's label
+        const adjustedColumn = dayOfWeek === 0 ? weekCount + 1 : weekCount;
+        monthLabels.push({ month, columnIndex: adjustedColumn });
       }
 
       squares.push(square);
-
-      // Increment week count after Sunday (day 0)
-      if (dayOfWeek === 0) {
-        weekCount++;
-      }
 
       currentDate.setDate(currentDate.getDate() + 1);
     }
@@ -331,7 +333,7 @@ class HealthDashboard {
       const label = monthLabels[i];
       const span = document.createElement('span');
       span.textContent = monthNames[label.month];
-      span.style.gridColumn = `${label.weekIndex + 1}`;
+      span.style.gridColumn = `${label.columnIndex + 1}`;
       monthsContainer.appendChild(span);
     }
 

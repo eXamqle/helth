@@ -26,14 +26,14 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-y: auto;
-    margin-top: 10px;
+    margin: 10px 10px 0 10px;
 }
 
 /* iOS Safe Area Support */
 .container {
     max-width: 100%;
     margin: 0 auto;
-    padding: env(safe-area-inset-top, 15px) env(safe-area-inset-right, 15px) env(safe-area-inset-bottom, 15px) env(safe-area-inset-left, 15px);
+    padding: env(safe-area-inset-top, 10px) env(safe-area-inset-right, 10px) env(safe-area-inset-bottom, 10px) env(safe-area-inset-left, 10px);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -70,23 +70,33 @@ header h1 {
 /* Main Content */
 main {
     flex: 1;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    align-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: stretch;
 }
 
 @media (min-width: 1600px) {
-    main {
-        grid-template-columns: repeat(3, 1fr);
+    main > .health-dashboard {
+        flex: 1 1 calc(33.333% - 0.34rem);
+        min-width: 0;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1599px) {
+    main > .health-dashboard {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 0;
     }
 }
 
 @media (max-width: 768px) {
     main {
-        display: flex;
         flex-direction: column;
-        overflow-x: auto;
+    }
+
+    main > .health-dashboard {
+        flex: 1 1 100%;
     }
 }
 
@@ -185,9 +195,13 @@ html {
 .health-dashboard {
     background: var(--card-bg);
     border-radius: 12px;
-    padding: 1rem 1.25rem;
+    padding: 0.875rem 1rem;
     box-shadow: var(--shadow);
     margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .chart-section {
@@ -233,12 +247,17 @@ html {
 
 /* Heatmap Container */
 .heatmap-container {
-    overflow-x: hidden;
+    overflow-x: auto;
     padding-bottom: 0.5rem;
+    flex: 1;
+    min-width: 0;
 }
 
 .heatmap-months {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 18px;
+    gap: 2px;
     margin-bottom: 0.25rem;
     padding-left: 38px;
     font-size: 0.8rem;
@@ -246,8 +265,8 @@ html {
 }
 
 .heatmap-months span {
-    flex: 1;
-    min-width: 10px;
+    min-width: 18px;
+    text-align: left;
 }
 
 .heatmap-wrapper {
